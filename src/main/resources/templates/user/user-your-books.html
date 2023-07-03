@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Your Books</title>
+<link rel="stylesheet" type="text/css" th:href="@{/CSS/account-layout.css}">
+</head>
+<body >
+	<ul th:replace="page-layout :: userNavBar"></ul>
+
+	<div class="container">
+		<h3>My Books</h3>
+	
+		<div class="row">
+			
+			
+			<form action="/user/yourB" method="GET">
+				<div>
+					<input style="margin-left: 20px" type="submit" value="Show all books" name="showAllBooks">
+					<input type="hidden" th:value="${reservedBookIds}" th:name="reservedBookIdsInString">
+				</div>
+			</form>
+		</div>
+			
+			<table id="tablestyle">
+				<tr>
+					<th>Title</th>
+					<th>Author</th>
+					<th>Release Year</th>
+					<th>Edition</th>
+				
+				</tr>
+				<tr th:each="book : ${books}">
+					<td  th:text="${book.title}"></td>
+					<td th:text="${book.author}"></td>
+					<td th:text="${book.releaseYear}"></td>
+					<td th:text="${book.edition}"></td>
+					
+						<form>
+							
+							<input type="hidden" th:value="${book.bookId}" th:name="reservedBookId">
+							<input type="hidden" th:value="${reservedBookIds}" th:name="reservedBookIdsInString">
+							
+							<input th:if="${title != null}" th:value="${title}" name="title" type="hidden">
+							<input th:if="${author != null}" th:value="${author}" name="author" type="hidden">
+							<input th:if="${showAllBooks !=null}" type="hidden" value="Show all books" name="showAllBooks">
+						</form>
+					</td>
+					<td th:if="${userHasFine}">
+						Not possible, reserving is blocked because you have a fine.
+					</td>
+					<td th:if="${book.endReservationDate != null && userHasFine == false}">
+						Not possible, book is already reserved.
+					</td>
+				</tr>
+				
+			</table> 
+	
+</body>
+</html>
